@@ -25,6 +25,7 @@ import data.Cards;
 import data.Excel;
 import data.StaticFunctions;
 
+
 public class ExcelLoader extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
@@ -41,7 +42,7 @@ public class ExcelLoader extends JDialog {
 	public ExcelLoader(final String filename) {
 		
         
-		setBounds(100, 100, 450, 300);
+		setBounds(StaticFunctions.bounds);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);

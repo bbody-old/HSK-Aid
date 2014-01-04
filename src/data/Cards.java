@@ -6,6 +6,8 @@ import java.util.Random;
 public class Cards {
 	ArrayList<Card> cards;
 	Random generator;
+	int last = -1;
+	
 	public Cards(ArrayList<Card> cards){
 		this.cards = cards;
 		generator = new Random();
@@ -45,8 +47,6 @@ public class Cards {
 		}
 		return true;
 	}
-	
-	int last = -1;
 
 	public Card getNext(boolean pass) {
 		if ((last != -1) && pass){
@@ -65,7 +65,6 @@ public class Cards {
 	}
 
 	public int getSize() {
-		// TODO Auto-generated method stub
 		return cards.size();
 	}
 }

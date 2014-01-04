@@ -4,15 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.File;
 
-import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -24,11 +20,11 @@ import javax.swing.JSplitPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SwingConstants;
-import javax.swing.filechooser.FileFilter;
 
 import data.Card;
 import data.Cards;
 import data.StaticFunctions;
+
 
 public class MainWindow {
 
@@ -36,62 +32,32 @@ public class MainWindow {
 	private JLabel label_1;
 	private JLabel lblPinyin;
 	private JTextPane txtpnEnglish;
-	/**
-	 * Launch the application.
-	 */
-	/*
-	public static void main(String[] args) {
-		
-		MainWindow window = new MainWindow();
-		
-		
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				MainWindow window = null;
-				try {
-					window = new MainWindow();
-					window.frame.setVisible(true);
-				} catch (Exception e){
-					if (window != null){
-						window.close();
-					}
-				}
-				
-			}
-		});
-	}*/
+	
+	Cards cards;
 
 	/**
 	 * Create the application.
-	 * @param cards2 
+	 * @param cards 
 	 */
 	public MainWindow(Cards cards) {
-		//while (true){
-			
-		//}
 		frame = new JFrame();
 		this.cards = cards;
 		initialize();
 		frame.setVisible(true);
 	}
 	
-	
-	
 	public void close(){
-		// TODO: Clean this up
+		// TODO: Save
 		frame.dispose();
 		System.exit(0);
 	}
 	
-	
-	Cards cards;
-	Rectangle bounds = new Rectangle(100, 100, 450, 300);// TODO: Externalise
 	/**
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
 		// Setup frame
-		frame.setBounds(bounds);
+		frame.setBounds(StaticFunctions.bounds);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		//
@@ -197,45 +163,4 @@ public class MainWindow {
 			textField_1.setText(Messages.getString("MainWindow.EMPTY_STRING")); //$NON-NLS-1$
 		}
 	}
-	
-	
-	
-
-	private String getFile(){
-		JFileChooser chooser = new JFileChooser();
-		
-		FileFilter ff = new FileFilter(){
-
-			@Override
-			public boolean accept(File arg0) {
-				if (arg0.isDirectory()){
-					return true;
-				}
-				return arg0.getName().endsWith(".xls");
-			}
-
-			@Override
-			public String getDescription() {
-				// TODO Auto-generated method stub
-				return "Excel Documents";
-			}};
-		chooser.setAcceptAllFileFilterUsed(false);
-		chooser.setFileFilter(ff);
-	    int returnVal = chooser.showOpenDialog(frame);
-	    if(returnVal == JFileChooser.APPROVE_OPTION) {
-	       System.out.println("You chose to open this file: " + //$NON-NLS-1$
-	            chooser.getSelectedFile().getName());
-	    }
-	    String filename;
-	    try {
-	    	filename = chooser.getSelectedFile().getAbsolutePath();
-	    } catch (NullPointerException e){
-	    	return null;
-	    }
-	    
-	    return filename;
-	    
-	}
-	
-
 }
