@@ -63,4 +63,9 @@ public class Cards {
 		}
 		return c;
 	}
+
+	public int getSize() {
+		// TODO Auto-generated method stub
+		return cards.size();
+	}
 }

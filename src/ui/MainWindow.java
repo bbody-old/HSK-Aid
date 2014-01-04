@@ -1,7 +1,6 @@
 package ui;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -12,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -39,7 +39,12 @@ public class MainWindow {
 	/**
 	 * Launch the application.
 	 */
+	/*
 	public static void main(String[] args) {
+		
+		MainWindow window = new MainWindow();
+		
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				MainWindow window = null;
@@ -54,45 +59,23 @@ public class MainWindow {
 				
 			}
 		});
-	}
+	}*/
 
 	/**
 	 * Create the application.
+	 * @param cards2 
 	 */
-	public MainWindow() {
-		frame = new JFrame(Messages.getString("MainWindow.APPLICATION_TITLE")); // TODO: Externalise me + add version number //$NON-NLS-1$
-		String filename = getFile();
-		switch (filenameCheck(filename)){
-			case OK:
-				initialize(filename);
-				break;
-			case EXTENSION:
-				System.out.println(Messages.getString("MainWindow.ERROR_EXTENSION")); //$NON-NLS-1$
-			default:
-				this.close();
-				break;
-		}	
+	public MainWindow(Cards cards) {
+		//while (true){
+			
+		//}
+		frame = new JFrame();
+		this.cards = cards;
+		initialize();
+		frame.setVisible(true);
 	}
 	
-	enum fileCheck{
-		OK,
-		NULL,
-		NOTHING,
-		EXTENSION
-	};
 	
-	private fileCheck filenameCheck(String filename){
-		if (filename == null){
-			return fileCheck.NULL;
-		} else if (!(filename.length() > 0)){
-			return fileCheck.NOTHING;
-		} else if (!filename.substring(filename.length() - 4, filename.length()).equals(Messages.getString("MainWindow.ACCEPTED_FILETYPE"))){ //$NON-NLS-1$
-			System.out.println(filename.substring(filename.length() - 3, filename.length()));
-			return fileCheck.EXTENSION;
-		} else {
-			return fileCheck.OK;
-		}
-	}
 	
 	public void close(){
 		// TODO: Clean this up
@@ -100,47 +83,13 @@ public class MainWindow {
 		System.exit(0);
 	}
 	
-	private String getFile(){
-		JFileChooser chooser = new JFileChooser();
-		FileFilter ff = new FileFilter(){
-
-			@Override
-			public boolean accept(File arg0) {
-				if (arg0.isDirectory()){
-					return true;
-				}
-				return arg0.getName().endsWith(Messages.getString("MainWindow.ACCEPTED_FILETYPE"));
-			}
-
-			@Override
-			public String getDescription() {
-				// TODO Auto-generated method stub
-				return "CSV - Comma Separated Values";
-			}};
-		chooser.setAcceptAllFileFilterUsed(false);
-		chooser.setFileFilter(ff);
-	    int returnVal = chooser.showOpenDialog(frame);
-	    if(returnVal == JFileChooser.APPROVE_OPTION) {
-	       System.out.println("You chose to open this file: " + //$NON-NLS-1$
-	            chooser.getSelectedFile().getName());
-	    }
-	    String filename;
-	    try {
-	    	filename = chooser.getSelectedFile().getAbsolutePath();
-	    } catch (NullPointerException e){
-	    	return null;
-	    }
-	    
-	    return filename;
-	    
-	}
 	
 	Cards cards;
 	Rectangle bounds = new Rectangle(100, 100, 450, 300);// TODO: Externalise
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(String filename) {
+	private void initialize() {
 		// Setup frame
 		frame.setBounds(bounds);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -156,8 +105,8 @@ public class MainWindow {
 		mntmOpen.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				String filename = getFile();
-				cards = new Cards(StaticFunctions.getCardsFromCSV(filename));
+				//String filename = getFile();
+				//cards = new Cards(StaticFunctions.getCardsFromCSV(filename));
 			}
 		});
 		mnFile.add(mntmOpen);
@@ -225,7 +174,7 @@ public class MainWindow {
 		textField_1.setColumns(10);
 		panel_3.add(textField_1);
 		
-		cards = new Cards(StaticFunctions.getCardsFromCSV(filename));
+		System.out.println(cards.getSize());
 		incrementCard(true);
 	}
 	JLabel label;
@@ -248,4 +197,45 @@ public class MainWindow {
 			textField_1.setText(Messages.getString("MainWindow.EMPTY_STRING")); //$NON-NLS-1$
 		}
 	}
+	
+	
+	
+
+	private String getFile(){
+		JFileChooser chooser = new JFileChooser();
+		
+		FileFilter ff = new FileFilter(){
+
+			@Override
+			public boolean accept(File arg0) {
+				if (arg0.isDirectory()){
+					return true;
+				}
+				return arg0.getName().endsWith(".xls");
+			}
+
+			@Override
+			public String getDescription() {
+				// TODO Auto-generated method stub
+				return "Excel Documents";
+			}};
+		chooser.setAcceptAllFileFilterUsed(false);
+		chooser.setFileFilter(ff);
+	    int returnVal = chooser.showOpenDialog(frame);
+	    if(returnVal == JFileChooser.APPROVE_OPTION) {
+	       System.out.println("You chose to open this file: " + //$NON-NLS-1$
+	            chooser.getSelectedFile().getName());
+	    }
+	    String filename;
+	    try {
+	    	filename = chooser.getSelectedFile().getAbsolutePath();
+	    } catch (NullPointerException e){
+	    	return null;
+	    }
+	    
+	    return filename;
+	    
+	}
+	
+
 }
