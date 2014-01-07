@@ -34,7 +34,6 @@ public class Excel {
 				Cell c = cell.next();
 				try {
 					String value = c.getStringCellValue();
-					// System.out.println(value);
 					rowList.addElement(value);
 				} catch (IllegalStateException e) {
 					Double d = new Double(c.getNumericCellValue());
@@ -65,7 +64,6 @@ public class Excel {
 			for (int j = 0; j < Math.min(columnsSize, 5); j++) {
 				try {
 					values[i][j] = excel.get(i).get(j);
-					// System.out.println(values[i][j]);
 				} catch (NullPointerException e) {
 					values[i][j] = "";
 				} catch (ArrayIndexOutOfBoundsException e) {
