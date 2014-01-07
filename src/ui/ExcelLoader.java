@@ -36,12 +36,11 @@ public class ExcelLoader extends JDialog {
 	private JComboBox englishComboBox;
 	private DefaultTableModel model;
 	Excel excel = null;
+	
 	/**
 	 * Create the dialog.
 	 */
 	public ExcelLoader(final String filename) {
-		
-        
 		setBounds(StaticFunctions.bounds);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
