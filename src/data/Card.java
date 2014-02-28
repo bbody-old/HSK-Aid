@@ -52,6 +52,10 @@ public class Card {
 	public int getCompletedTally() {
 		return completedTally;
 	}
+	
+	public void setCompletedTally(int tally) {
+		completedTally = tally;
+	}
 	public void success() {
 		completedTally++;
 	}	

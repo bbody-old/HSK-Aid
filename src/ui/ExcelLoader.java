@@ -7,6 +7,8 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.JButton;
@@ -22,6 +24,7 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
 import data.Cards;
+import data.CardsSaveFile;
 import data.Excel;
 import data.StaticFunctions;
 
@@ -186,8 +189,21 @@ public class ExcelLoader extends JDialog {
 						int englishColumn = englishComboBox.getSelectedIndex();
 						int chineseColumn = chineseComboBox.getSelectedIndex();
 						int pinyinColumn = pinyinComboBox.getSelectedIndex();
+						
+						CardsSaveFile csf = new CardsSaveFile();
+						csf.setChinese(chineseColumn);
+						csf.setEnglish(englishColumn);
+						csf.setPinyin(pinyinColumn);
+						csf.setTitle(titleRow);
+						try {
+							csf.save(filename);
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
 						Cards cards = excel.getCards(titleRow, englishColumn, chineseColumn, pinyinColumn);
-						MainWindow mw = new MainWindow(cards);
+						MainWindow mw = new MainWindow(cards, filename);
+						
 						dispose();
 					}
 					
@@ -203,13 +219,17 @@ public class ExcelLoader extends JDialog {
 					public void actionPerformed(ActionEvent arg0) {
 						// TODO Close window
 						dispose();
-						System.exit(0);
+						if (Main.close()){
+							System.exit(0);
+						}
 					}
 					
 				});
 			}
 		}
 	}
+	
+	
 	
 	
 	

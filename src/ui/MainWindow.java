@@ -8,6 +8,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.prefs.Preferences;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,6 +25,7 @@ import javax.swing.SwingConstants;
 
 import data.Card;
 import data.Cards;
+import data.CardsSaveFile;
 import data.StaticFunctions;
 
 
@@ -34,12 +37,14 @@ public class MainWindow {
 	private JTextPane txtpnEnglish;
 	
 	Cards cards;
+	private String filename;
 
 	/**
 	 * Create the application.
 	 * @param cards 
 	 */
-	public MainWindow(Cards cards) {
+	public MainWindow(Cards cards, String filename) {
+		this.filename = filename;
 		frame = new JFrame();
 		this.cards = cards;
 		initialize();
@@ -49,6 +54,13 @@ public class MainWindow {
 	public void close(){
 		// TODO: Save
 		frame.dispose();
+		CardsSaveFile csf = new CardsSaveFile();
+		try {
+			csf.saveProgress(filename, cards);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		System.exit(0);
 	}
 	
@@ -70,9 +82,33 @@ public class MainWindow {
 		JMenuItem mntmOpen = new JMenuItem(Messages.getString("MainWindow.MENU_ITEM_OPEN")); //$NON-NLS-1$
 		mntmOpen.addMouseListener(new MouseAdapter() {
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
+			public void mousePressed(MouseEvent arg0) {
 				//String filename = getFile();
 				//cards = new Cards(StaticFunctions.getCardsFromCSV(filename));
+				String filename = StaticFunctions.getFile(frame);
+				
+				// Check if filename has any problems
+				switch (StaticFunctions.filenameCheck(filename)){
+					case OK:
+						frame.setVisible(false);
+						ExcelLoader el = new ExcelLoader(filename);
+						Preferences prefs = Preferences.userRoot().node("lastfile");
+						prefs.put("LASTFILENAME", filename);
+						el.setVisible(true);
+						break;
+					case NULL:
+						JOptionPane.showMessageDialog(frame, Messages.getString("MainWindow.MESSAGE_NOTHING_SELECTED"));
+						break;
+					case NOTHING:
+						JOptionPane.showMessageDialog(frame, Messages.getString("MainWindow.MESSAGE_NOTHING_SELECTED"));
+						break;
+					case EXTENSION:
+						JOptionPane.showMessageDialog(frame, Messages.getString("MainWindow.MESSAGE_EXTENSION"));
+						break;
+					case NOT_EXIST:
+						JOptionPane.showMessageDialog(frame, Messages.getString("MainWindow.MESSAGE_NON_EXIST"));
+						break;
+				}
 			}
 		});
 		mnFile.add(mntmOpen);
@@ -81,6 +117,13 @@ public class MainWindow {
 		mnFile.add(mntmAbout);
 		
 		JMenuItem mntmExit = new JMenuItem(Messages.getString("MainWindow.MENU_ITEM_EXIT")); //$NON-NLS-1$
+		mntmExit.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent arg0) {
+				// TODO clean up save files
+				System.exit(0);
+			}
+		});
 		mnFile.add(mntmExit);
 		
 		JPanel panel = new JPanel();
@@ -154,7 +197,9 @@ public class MainWindow {
 				    "Finished", //$NON-NLS-1$
 				    JOptionPane.ERROR_MESSAGE);
 			frame.dispose();
-			System.exit(0);
+			if (Main.close()){
+				System.exit(0);
+			}
 		} else {
 			label.setText(currentCard.getSimp());
 			lblPinyin.setText(currentCard.getPinyin());
