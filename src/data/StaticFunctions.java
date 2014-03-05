@@ -41,10 +41,6 @@ public class StaticFunctions {
 		chooser.setAcceptAllFileFilterUsed(false);
 		chooser.setFileFilter(ff);
 	    int returnVal = chooser.showOpenDialog(frame);
-	    if(returnVal == JFileChooser.APPROVE_OPTION) {
-	       System.out.println("You chose to open this file: " + //$NON-NLS-1$
-	            chooser.getSelectedFile().getName());
-	    }
 	    String filename;
 	    try {
 	    	filename = chooser.getSelectedFile().getAbsolutePath();
@@ -62,7 +58,7 @@ public class StaticFunctions {
 		} else if (!(filename.length() > 0)){
 			return fileCheck.NOTHING;
 		} else if (!filename.endsWith(".xls")){ //$NON-NLS-1$
-			System.out.println(filename.substring(filename.length() - 3, filename.length()));
+			//System.out.println(filename.substring(filename.length() - 3, filename.length()));
 			return fileCheck.EXTENSION;
 		} else if (!new File(filename).exists()){
 			return fileCheck.NOT_EXIST;

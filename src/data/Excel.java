@@ -80,9 +80,6 @@ public class Excel {
 
 		for (int i = titleRow + 1; i < excel.size(); i++) {
 			Vector<String> temp = excel.get(i);
-			if (i == titleRow) {
-				System.out.println(temp.toString());
-			}
 			if (temp.size() > 3) {
 				Card c = new Card(temp.get(chineseColumn),
 						temp.get(chineseColumn), temp.get(englishColumn),

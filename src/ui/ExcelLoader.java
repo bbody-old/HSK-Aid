@@ -39,11 +39,11 @@ public class ExcelLoader extends JDialog {
 	private JComboBox englishComboBox;
 	private DefaultTableModel model;
 	Excel excel = null;
-	
+	public Cards cards;
 	/**
 	 * Create the dialog.
 	 */
-	public ExcelLoader(final String filename) {
+	public ExcelLoader(final String filename, final boolean close) {
 		setBounds(StaticFunctions.bounds);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -162,8 +162,6 @@ public class ExcelLoader extends JDialog {
 				e.printStackTrace();
 			}
 			
-			
-			
 			GridBagConstraints gbc_table = new GridBagConstraints();
 			gbc_table.gridheight = 2;
 			gbc_table.gridwidth = 7;
@@ -201,8 +199,8 @@ public class ExcelLoader extends JDialog {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
-						Cards cards = excel.getCards(titleRow, englishColumn, chineseColumn, pinyinColumn);
-						MainWindow mw = new MainWindow(cards, filename);
+						cards = excel.getCards(titleRow, englishColumn, chineseColumn, pinyinColumn);
+						//MainWindow mw = new MainWindow(cards, filename);
 						
 						dispose();
 					}
@@ -219,7 +217,7 @@ public class ExcelLoader extends JDialog {
 					public void actionPerformed(ActionEvent arg0) {
 						// TODO Close window
 						dispose();
-						if (Main.close()){
+						if (close && Main.close()){
 							System.exit(0);
 						}
 					}

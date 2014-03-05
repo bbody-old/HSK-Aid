@@ -8,6 +8,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.util.prefs.Preferences;
 
@@ -49,6 +51,50 @@ public class MainWindow {
 		this.cards = cards;
 		initialize();
 		frame.setVisible(true);
+		frame.addWindowListener(new WindowListener() {
+			
+			@Override
+			public void windowOpened(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+				// TODO Auto-generated method stub
+				close();
+			}
+
+			@Override
+			public void windowActivated(WindowEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 	}
 	
 	public void close(){
@@ -56,7 +102,7 @@ public class MainWindow {
 		frame.dispose();
 		CardsSaveFile csf = new CardsSaveFile();
 		try {
-			csf.saveProgress(filename, cards);
+			csf.saveProgress(cards);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -83,32 +129,7 @@ public class MainWindow {
 		mntmOpen.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
-				//String filename = getFile();
-				//cards = new Cards(StaticFunctions.getCardsFromCSV(filename));
-				String filename = StaticFunctions.getFile(frame);
-				
-				// Check if filename has any problems
-				switch (StaticFunctions.filenameCheck(filename)){
-					case OK:
-						frame.setVisible(false);
-						ExcelLoader el = new ExcelLoader(filename);
-						Preferences prefs = Preferences.userRoot().node("lastfile");
-						prefs.put("LASTFILENAME", filename);
-						el.setVisible(true);
-						break;
-					case NULL:
-						JOptionPane.showMessageDialog(frame, Messages.getString("MainWindow.MESSAGE_NOTHING_SELECTED"));
-						break;
-					case NOTHING:
-						JOptionPane.showMessageDialog(frame, Messages.getString("MainWindow.MESSAGE_NOTHING_SELECTED"));
-						break;
-					case EXTENSION:
-						JOptionPane.showMessageDialog(frame, Messages.getString("MainWindow.MESSAGE_EXTENSION"));
-						break;
-					case NOT_EXIST:
-						JOptionPane.showMessageDialog(frame, Messages.getString("MainWindow.MESSAGE_NON_EXIST"));
-						break;
-				}
+				Main.entryPoint(frame);
 			}
 		});
 		mnFile.add(mntmOpen);
@@ -121,7 +142,7 @@ public class MainWindow {
 			@Override
 			public void mousePressed(MouseEvent arg0) {
 				// TODO clean up save files
-				System.exit(0);
+				close();
 			}
 		});
 		mnFile.add(mntmExit);
@@ -183,7 +204,6 @@ public class MainWindow {
 		textField_1.setColumns(10);
 		panel_3.add(textField_1);
 		
-		System.out.println(cards.getSize());
 		incrementCard(true);
 	}
 	JLabel label;
@@ -198,7 +218,7 @@ public class MainWindow {
 				    JOptionPane.ERROR_MESSAGE);
 			frame.dispose();
 			if (Main.close()){
-				System.exit(0);
+				close();
 			}
 		} else {
 			label.setText(currentCard.getSimp());
@@ -206,6 +226,34 @@ public class MainWindow {
 			txtpnEnglish.setText(currentCard.getEnglish());
 			
 			textField_1.setText(Messages.getString("MainWindow.EMPTY_STRING")); //$NON-NLS-1$
+		}
+	}
+	
+	private void loadFile(){
+		//String filename = getFile();
+		//cards = new Cards(StaticFunctions.getCardsFromCSV(filename));
+		String filename = StaticFunctions.getFile(frame);
+		// Check if filename has any problems
+		switch (StaticFunctions.filenameCheck(filename)){
+			case OK:
+				frame.setVisible(false);
+				ExcelLoader el = new ExcelLoader(filename, false);
+				Preferences prefs = Preferences.userRoot().node("lastfile");
+				prefs.put("LASTFILENAME", filename);
+				el.setVisible(true);
+				break;
+			case NULL:
+				JOptionPane.showMessageDialog(frame, Messages.getString("MainWindow.MESSAGE_NOTHING_SELECTED"));
+				break;
+			case NOTHING:
+				JOptionPane.showMessageDialog(frame, Messages.getString("MainWindow.MESSAGE_NOTHING_SELECTED"));
+				break;
+			case EXTENSION:
+				JOptionPane.showMessageDialog(frame, Messages.getString("MainWindow.MESSAGE_EXTENSION"));
+				break;
+			case NOT_EXIST:
+				JOptionPane.showMessageDialog(frame, Messages.getString("MainWindow.MESSAGE_NON_EXIST"));
+				break;
 		}
 	}
 }
